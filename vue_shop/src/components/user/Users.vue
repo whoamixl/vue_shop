@@ -130,20 +130,18 @@
 export default {
   name: 'Users',
   data() {
-    //验证邮箱的校验规则
-    var checkEmai = (rule,value,cb)=>{
+    // 验证邮箱的校验规则
+    var checkEmai = (rule, value, cb) => {
       const regEmail = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/
-      if(regEmail.test(value))
-      {
+      if (regEmail.test(value)) {
         return cb()
       }
       cb(new Error('请输入合法的邮箱'))
     }
-    //验证电话的校验规则
-    var checkMobile = (rule,value,cb)=>{
+    // 验证电话的校验规则
+    var checkMobile = (rule, value, cb) => {
       const regMobile = /^(13[0-9]|14[5|7]|15[0|1|2|3|4|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/
-      if(regMobile.test(value))
-      {
+      if (regMobile.test(value)) {
         return cb()
       }
       cb(new Error('请输入合法的电话'))
@@ -152,48 +150,48 @@ export default {
     return {
       queryInfo: {
         'query': '',
-          // 当前的页数
+        // 当前的页数
         'pagenum': 1,
-          // 每页的条数
+        // 每页的条数
         'pagesize': 2
       },
 
-      addInfo:{
-        username:'',
-        password:'',
-        email:'',
-        mobile:''
+      addInfo: {
+        username: '',
+        password: '',
+        email: '',
+        mobile: ''
       },
 
-      editInfo:{
+      editInfo: {
 
       },
 
-      addInfoRules:{
-        username:[
+      addInfoRules: {
+        username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
         ],
-        password:[
+        password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
           { min: 6, max: 10, message: '长度在 6 到 10 个字符', trigger: 'blur' }
         ],
-        email:[
+        email: [
           { required: true, message: '请输入邮箱', trigger: 'blur' },
           { validator: checkEmai, trigger: 'blur' }
         ],
-        mobile:[
+        mobile: [
           { required: true, message: '请输入电话', trigger: 'blur' },
           { validator: checkMobile, trigger: 'blur' }
         ]
       },
 
-      editInfoRules:{
-        email:[
+      editInfoRules: {
+        email: [
           { required: true, message: '请输入邮箱', trigger: 'blur' },
           { validator: checkEmai, trigger: 'blur' }
         ],
-        mobile:[
+        mobile: [
           { required: true, message: '请输入电话', trigger: 'blur' },
           { validator: checkMobile, trigger: 'blur' }
         ]
@@ -201,8 +199,8 @@ export default {
 
       userList: [],
       total: 0,
-      addDialogVisible:false,
-      EditdialogVisible:false
+      addDialogVisible: false,
+      EditdialogVisible: false
     }
   },
   created() {
@@ -219,104 +217,99 @@ export default {
       console.log(this.total)
     },
     // 监听pagesize的改变
-    handleSizeChange(newSZ){
+    handleSizeChange(newSZ) {
       // console.log(newSZ)
-        this.queryInfo.pagesize = newSZ
-        this.getUserList()
+      this.queryInfo.pagesize = newSZ
+      this.getUserList()
     },
-    //监听页码值的变化
-    handleCurrentChange(newPG){
+    // 监听页码值的变化
+    handleCurrentChange(newPG) {
       // console.log(newPG)
-        this.queryInfo.pagenum = newPG
-        this.getUserList()
+      this.queryInfo.pagenum = newPG
+      this.getUserList()
     },
-      //监听switch开关状态的改变
-      async changeUserState(userinfo){
-           console.log(userinfo)
-          const {data:res} =await this.$http.put(`users/${userinfo.id}/state/${userinfo.mg_state}`)
-           if(res.meta.status !== 200)
-           {
-               userinfo.mg_state = !userinfo.mg_state
-               return this.$message.error("修改状态失败")
-               // this.getUserList()
-           }
-           return this.$message.success("修改状态成功")
-      },
+    // 监听switch开关状态的改变
+    async changeUserState(userinfo) {
+      console.log(userinfo)
+      const { data: res } = await this.$http.put(`users/${userinfo.id}/state/${userinfo.mg_state}`)
+      if (res.meta.status !== 200) {
+        userinfo.mg_state = !userinfo.mg_state
+        return this.$message.error('修改状态失败')
+        // this.getUserList()
+      }
+      return this.$message.success('修改状态成功')
+    },
 
-       addUser(){
-        this.$refs.addInfoRuleForm.validate(async valid =>{
-          if(!valid) return console.log("aaaaaaaaaaaaaaaaaa")
-          const {data:res} = await this.$http.post('users', this.addInfo)
-          if(res.meta.status !== 201)
-          {
-            console.log('dddddddddddddd')
-            return this.$message.error('添加用户失败')
-          }
-          else{
-            console.log('sssssss')
-            this.$message.success('添加用户成功')
-            this.getUserList()
-            this.addDialogVisible = false
-          }
-        })
-      },
+    addUser() {
+      this.$refs.addInfoRuleForm.validate(async valid => {
+        if (!valid) return console.log('aaaaaaaaaaaaaaaaaa')
+        const { data: res } = await this.$http.post('users', this.addInfo)
+        if (res.meta.status !== 201) {
+          console.log('dddddddddddddd')
+          return this.$message.error('添加用户失败')
+        } else {
+          console.log('sssssss')
+          this.$message.success('添加用户成功')
+          this.getUserList()
+          this.addDialogVisible = false
+        }
+      })
+    },
 
-    //监听添加用户对话框的关闭事件
-    addDialogClose(){
+    // 监听添加用户对话框的关闭事件
+    addDialogClose() {
       this.$refs.addInfoRuleForm.resetFields()
     },
 
-    showEditDialog(data){
+    showEditDialog(data) {
       this.editInfo = data
       console.log(this.editInfo)
       this.EditdialogVisible = true
     },
 
-     editUser(){
-      this.$refs.editInfoRuleForm.validate(async valid =>{
-        if(!valid) return console.log("aaaaaaaaaaaaaaaaaa")
-        const {data:res} =await this.$http.put('users/' + this.editInfo.id,{
-          email:this.editInfo.email,
-          mobile:this.editInfo.mobile
+    editUser() {
+      this.$refs.editInfoRuleForm.validate(async valid => {
+        if (!valid) return console.log('aaaaaaaaaaaaaaaaaa')
+        const { data: res } = await this.$http.put('users/' + this.editInfo.id, {
+          email: this.editInfo.email,
+          mobile: this.editInfo.mobile
         })
         console.log(res)
-        if(res.meta.status !== 200)
-        {
-          return this.$message.error("修改用户失败")
+        if (res.meta.status !== 200) {
+          return this.$message.error('修改用户失败')
           // this.getUserList()
         }
         this.EditdialogVisible = false
-        return this.$message.success("修改用户成功")
+        return this.$message.success('修改用户成功')
+        // eslint-disable-next-line no-unreachable
         await this.getUserList()
       })
-     },
-     deleteUser(userId) {
+    },
+    deleteUser(userId) {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async() => {
-        const {data:res} = await this.$http.delete(`users/${userId}`)
-        if(res.meta.status !== 200 ) return this.$message.error('删除失败')
+        const { data: res } = await this.$http.delete(`users/${userId}`)
+        if (res.meta.status !== 200) return this.$message.error('删除失败')
         this.queryInfo.pagenum = 1
         this.getUserList()
         this.$message({
           type: 'success',
           message: '删除成功!'
-        });
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
           message: '已取消删除'
-        });
-      });
-    },
+        })
+      })
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
-
-
 
 </style>
