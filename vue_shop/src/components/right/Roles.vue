@@ -43,7 +43,7 @@
       title="添加角色"
       :visible.sync="addRoleVisible"
       width="50%"
-      @close="this.addRoleClose"
+      @closed="addRoleClose"
     >
           <span>
             <el-form :model="addRoleInfo" :rules="addInfoRules" ref="addRoleForm" label-width="100px" class="demo-ruleForm">
@@ -86,7 +86,7 @@ export default {
           { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
         ],
         roledescribe: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
+          { required: false, message: '请输入密码', trigger: 'blur' },
           { min: 6, max: 10, message: '长度在 6 到 10 个字符', trigger: 'blur' }
         ]
       }
@@ -104,7 +104,10 @@ export default {
     },
 
     addRoleClose() {
+      this.addRoleInfo.roleName = ''
+      this.addRoleInfo.roleDesc = ''
       this.$refs.addRoleForm.resetFields()
+      console.log('sssssssssssss')
     },
 
     addRole() {
