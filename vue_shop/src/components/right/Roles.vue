@@ -121,19 +121,21 @@
       @close="clearLeafKeys"
       >
       <span>
+<!--                :default-expanded-keys="[105]"-->
         <el-tree
         :data="rightsListTree"
         show-checkbox
         node-key="id"
-        :default-expanded-keys="[105]"
         :default-checked-keys="leafKeys"
         :props="treeProps"
+        :default-expand-all="true"
+        ref="treeRef"
         >
         </el-tree>
       </span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="rightConifVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="allotRights">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -158,6 +160,9 @@ export default {
       addRoleVisible: false,
       editRoleVisible: false,
       rightConifVisible: false,
+
+      // 即将分配权限的角色ID
+      roleId: '',
 
       addRoleInfo: {
         roleName: '',
@@ -271,6 +276,7 @@ export default {
     },
 
     async getRightsListTree(role) {
+      this.roleId = role.id
       const { data: res } = await this.$http.get('rights/tree')
       if (res.meta.status !== 200) return this.$message.error('获取列表失败')
       this.rightsListTree = res.data
@@ -292,6 +298,17 @@ export default {
 
     clearLeafKeys() {
       this.leafKeys = []
+    },
+
+    async allotRights() {
+      const treeKeysArr = [...this.$refs.treeRef.getCheckedKeys(), ...this.$refs.treeRef.getHalfCheckedKeys()]
+      const keysArrStr = treeKeysArr.toString()
+      console.log(keysArrStr)
+      const { data: res } = await this.$http.post(`roles/${this.roleId}/rights`, { rids: keysArrStr })
+      if (res.meta.status !== 200) return this.$message.error('分配权限失败')
+      this.$message.success('分配权限成功')
+      this.rightConifVisible = false
+      await this.getRolesList()
     }
   }
 }
