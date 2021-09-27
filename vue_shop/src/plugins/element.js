@@ -5,7 +5,10 @@ import {
   Card, Table, TableColumn, Switch, Tooltip, Row, Col, Pagination, Dialog, MessageBox,
   Tag, Tree, Select, Option
 } from 'element-ui'
+// eslint-disable-next-line camelcase
+import { Table as Table_iview } from 'iview'
 
+Vue.component('Table', Table_iview)
 Vue.use(Button)
 Vue.use(Form)
 Vue.use(FormItem)
