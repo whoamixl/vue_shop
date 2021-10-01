@@ -3,7 +3,7 @@ import {
   Button, Form, FormItem, Input, Message, Container, Aside, Main, Header,
   Menu, MenuItem, Submenu, MenuItemGroup, Breadcrumb, BreadcrumbItem,
   Card, Table, TableColumn, Switch, Tooltip, Row, Col, Pagination, Dialog, MessageBox,
-  Tag, Tree, Select, Option
+  Tag, Tree, Select, Option, Alert, Tabs, TabPane
 } from 'element-ui'
 // eslint-disable-next-line camelcase
 import { Table as Table_iview, Cascader } from 'iview'
@@ -36,7 +36,10 @@ Vue.use(Tag)
 Vue.use(Tree)
 Vue.use(Select)
 Vue.use(Option)
+Vue.use(Tabs)
+Vue.use(TabPane)
 Vue.component('Cascader', Cascader)
+Vue.component('el-alert', Alert)
 
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm
