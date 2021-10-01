@@ -6,7 +6,7 @@ import {
   Tag, Tree, Select, Option
 } from 'element-ui'
 // eslint-disable-next-line camelcase
-import { Table as Table_iview } from 'iview'
+import { Table as Table_iview, Cascader } from 'iview'
 
 Vue.component('Table', Table_iview)
 Vue.use(Button)
@@ -36,5 +36,7 @@ Vue.use(Tag)
 Vue.use(Tree)
 Vue.use(Select)
 Vue.use(Option)
+Vue.component('Cascader', Cascader)
+
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm
